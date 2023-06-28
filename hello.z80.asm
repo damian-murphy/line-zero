@@ -52,11 +52,12 @@ PRINTSTRING:
   ; print a string of chars
   ; bc contains the memory address of the start of string
   ; string is 0 terminated
-  ld a, (bc)
-  cp 0
-  ret z
-  inc bc
-  call PRINTC
+  ld a, (bc)    ; load A register with contents of memory at (bc)
+  cp 0          ; compare A register with 0
+  ret z         ; return if compare is true (i.e. it's zero)
+  inc bc        ; increment bc to point at next memory location
+  call PRINTC   ; call our printchar routine
+
   ; Loop until done (null byte termination)
   jr PRINTSTRING
 
@@ -73,10 +74,10 @@ BORDERS:
   ld a,0        ; start with black
   BORDER_LOOP:
     out (#fe),a   ; set the border color
-    cp 7
-    ret z
-    inc a
-    ld bc,250
+    cp 7          ; go through the colours to white (7)
+    ret z         ; if compare is true, return
+    inc a         ; next colour
+    ld bc,250     ; load a value for delay
     call Delay
     jr BORDER_LOOP
   ret
